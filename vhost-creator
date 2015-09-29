@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Parse args
+while [[ $# > 1 ]]
+do
+key="$1"
+
+case $key in
+    -d|--domain-name)
+    DOMAINNAME="$2"
+    shift # past argument
+    ;;
+    -r|--document-root)
+    DOCUMENTROOT="$2"
+    shift # past argument
+    ;;
+    -h|--help)
+    LIBPATH="$2"
+    shift # past argument
+    ;;
+    *)
+            # unknown option
+    ;;
+esac
+shift # past argument or value
+done
+
+if [ "" == "${DOMAINNAME}" ] || [ "" == "${DOCUMENTROOT}" ]; then
+	echo "Domain name or document root not specified."
+else
+	# check if domain doesn't exists already
+
+
+	SERVERNAME="${DOMAINNAME}.local"
+	# Create vhost file
+	sed 	-e "s#:DOMAINNAME:#${DOMAINNAME}#g" \
+		-e "s#:SERVERNAME:#${SERVERNAME}#g" \
+		-e "s#:DOCUMENTROOT:#${DOCUMENTROOT}#g" \
+	    vhost_template.conf > ${DOMAINNAME}.conf
+	sudo mv ${DOMAINNAME}.conf /etc/apache2/sites-available/${DOMAINNAME}.conf
+
+	# Activate vhost
+	# Alter local hosts file to locally resolve vhost
+
+
+fi
