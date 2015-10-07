@@ -40,7 +40,11 @@ else
 	sudo mv ${DOMAINNAME}.conf /etc/apache2/sites-available/${DOMAINNAME}.conf
 
 	# Activate vhost
+	sudo a2ensite ${DOMAINNAME}.conf
+	sudo service apache2 restart
+
 	# Alter local hosts file to locally resolve vhost
+	sudo sh -c "echo '127.0.0.1    ${DOMAINNAME}.local    ${DOMAINNAME}' >> /etc/hosts"
 
 
 fi
